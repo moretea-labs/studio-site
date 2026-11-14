@@ -92,5 +92,5 @@ a:focus-visible{outline:2px solid #648c70;outline-offset:5px}
 .studio{display:block;padding-top:89px;padding-bottom:95px}.studio h2{font-size:clamp(50px,11vw,70px)}.studio-copy{padding-top:35px}.studio-copy p{font-size:15px}
 .footer{grid-template-columns:1fr auto}.footer>span{order:3}.footer small{order:4}
 }
-@media(max-width:370px){.wrap{padding-left:19px;padding-right:19px}.header nav{gap:10px}.project-art{height:390px}.phone-left{height:315px;width:145px}.phone-right{height:351px;width:160px}}
+@media(max-width:370px){.wrap{padding-left:19px;padding-right:19px}.header nav{gap:10px}html[lang="en"] .hero h1{font-size:42px}.project-art{height:390px}.phone-left{height:315px;width:145px}.phone-right{height:351px;width:160px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
