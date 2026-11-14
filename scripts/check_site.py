@@ -56,6 +56,8 @@ def run():
         check(any("id6775778505" in a.get("href","") for a in parsed.links),"Avela App Store: "+path)
         check(any("avela.moretea-lab.tech" in a.get("href","") for a in parsed.links),"Avela site: "+path)
         check("TranslateDesk" in html and "COMING SOON" in html,"unreleased product: "+path)
+        check(any(a.get("href")=="https://github.com/moretea-labs/FluentTranslate" for a in parsed.links), "TranslateDesk source link: "+path)
+        check("Public download not yet available" in html if lang=="en" else "安装包尚未公开发布" in html,"unreleased download disclosure: "+path)
         for i in parsed.images:
             check(i.get("alt") and i.get("width") and i.get("height"),"image alt/dimensions: "+path)
             check((ROOT/i.get("src","").lstrip("/")).is_file(),"image file: "+str(i))

@@ -61,11 +61,11 @@ a:focus-visible{outline:2px solid #648c70;outline-offset:5px}
 .art-music .rhythm{position:absolute;right:32px;top:29px;color:#d0b07d;font-size:20px;letter-spacing:2px}
 .project-music .button{background:#3b3832}
 .project-music .button:hover{background:#5d5549}
-.upcoming{display:flex;justify-content:space-between;align-items:end;gap:24px;padding:51px 0 59px;border-bottom:1px solid var(--rule)}
+.upcoming{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(28px,5vw,80px);padding:59px 0 70px;border-bottom:1px solid var(--rule)}
 .upcoming .eyebrow{margin:0;font-size:10px}
 .upcoming h2{font-size:clamp(41px,4.8vw,64px);font-weight:550;letter-spacing:-.076em;margin:18px 0 7px}
 .upcoming h2 span{color:#709b77}
-.upcoming p{color:#7b887e;font-size:14px;margin:0}
+.upcoming p{color:#7b887e;font-size:14px;line-height:1.85;margin:0}.upcoming-info{padding-top:24px;max-width:440px}.upcoming-info .actions{margin-top:23px;gap:20px}.upcoming-info small{font-size:10px;color:#8b9a8f;letter-spacing:.02em;text-transform:none;white-space:normal}
 .upcoming small{color:#8b9a8f;white-space:nowrap}
 .studio{padding-top:clamp(85px,12vw,163px);padding-bottom:clamp(90px,12vw,163px);display:grid;grid-template-columns:1fr .85fr;gap:80px}
 .studio .eyebrow{margin:0 0 29px}
@@ -88,7 +88,7 @@ a:focus-visible{outline:2px solid #648c70;outline-offset:5px}
 .project h2{font-size:clamp(48px,10.5vw,66px);margin:20px 0}.project h3{font-size:29px;margin:15px 0}
 .project-copy>p{font-size:14px}.actions{margin-top:26px}
 .project-art{width:100%;height:425px}.phone-left{height:345px;width:158px;left:calc(50% - 132px)}.phone-right{height:382px;width:175px;left:calc(50% - 20px)}
-.upcoming{flex-direction:column;align-items:start;gap:23px;padding:36px 0 47px}.upcoming h2{font-size:46px}
+.upcoming{display:block;padding:42px 0 51px}.upcoming-info{padding-top:24px}.upcoming h2{font-size:46px}
 .studio{display:block;padding-top:89px;padding-bottom:95px}.studio h2{font-size:clamp(50px,11vw,70px)}.studio-copy{padding-top:35px}.studio-copy p{font-size:15px}
 .footer{grid-template-columns:1fr auto}.footer>span{order:3}.footer small{order:4}
 }
