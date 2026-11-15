@@ -72,7 +72,10 @@ def run():
             if a.get("target")=="_blank":
                 check("noopener" in a.get("rel",""),"noopener: "+str(a))
         print("PASS",url,"SEO, links, accessibility, images")
-    ET.parse(ROOT/"sitemap.xml")
+    sitemap=ET.parse(ROOT/"sitemap.xml").getroot()
+    check(sitemap.tag.endswith("urlset"),"sitemap root")
+    check(all(node.tag.endswith("url") for node in sitemap),"sitemap URL entries")
+    check(not (sitemap.text or "").strip() and all(not (node.tail or "").strip() for node in sitemap),"sitemap whitespace")
     check((ROOT/"robots.txt").read_text().strip().endswith("sitemap.xml"),"robots")
     check((ROOT/"favicon.svg").is_file() and (ROOT/"assets/og-studio.png").is_file(),"social assets")
     print("PASS sitemap, robots, social image")
