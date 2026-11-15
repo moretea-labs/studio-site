@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url><loc>https://moretea-lab.tech/</loc><xhtml:link rel="alternate" hreflang="zh-CN" href="https://moretea-lab.tech/"/><xhtml:link rel="alternate" hreflang="en" href="https://moretea-lab.tech/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://moretea-lab.tech/en/"/></url>
-  <url><loc>https://moretea-lab.tech/en/</loc><xhtml:link rel="alternate" hreflang="zh-CN" href="https://moretea-lab.tech/"/><xhtml:link rel="alternate" hreflang="en" href="https://moretea-lab.tech/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://moretea-lab.tech/en/"/></url>
+  <url><loc>https://moretea-lab.tech/en/</loc><xhtml:link rel="alternate" hreflang="zh-CN" href="https://moretea-lab.tech/"/><xhtml:link rel="alternate" hreflang="en" href="https://moretea-lab.tech/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://moretea-lab.tech/en/"/></url>\n  <url><loc>https://moretea-lab.tech/veilspace/privacy/</loc></url>\n  <url><loc>https://moretea-lab.tech/veilspace/support/</loc></url>
 </urlset>
