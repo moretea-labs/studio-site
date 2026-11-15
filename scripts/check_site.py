@@ -11,12 +11,13 @@ ROOT = Path(__file__).resolve().parent.parent
 class SitePage(HTMLParser):
     def __init__(self):
         super().__init__()
-        self.links=[]; self.images=[]; self.h1=0; self.titles=0
+        self.links=[]; self.images=[]; self.ids=[]; self.h1=0; self.titles=0
         self.canonical=[]; self.languages={}; self.meta={}; self.schemas=[]
         self.json_script=False; self.json_buffer=""
 
     def handle_starttag(self, tag, attrs):
         p=dict(attrs)
+        if p.get("id"): self.ids.append(p["id"])
         if tag=="h1": self.h1+=1
         if tag=="title": self.titles+=1
         if tag=="a": self.links.append(p)
@@ -61,8 +62,13 @@ def run():
         for i in parsed.images:
             check(i.get("alt") and i.get("width") and i.get("height"),"image alt/dimensions: "+path)
             check((ROOT/i.get("src","").lstrip("/")).is_file(),"image file: "+str(i))
+        check(len(parsed.ids)==len(set(parsed.ids)), "duplicate anchor id: "+path)
+        check(any(a.get("href")==("/en/" if lang=="zh-CN" else "/") for a in parsed.links), "language switch: "+path)
         for a in parsed.links:
-            check(a.get("href","").startswith(("/","#","https://","mailto:")),"unsafe href: "+str(a))
+            href=a.get("href","")
+            check(href.startswith(("/","#","https://","mailto:")),"unsafe href: "+str(a))
+            if href.startswith("#"):
+                check(href[1:] in parsed.ids, "broken in-page navigation: "+href+" in "+path)
             if a.get("target")=="_blank":
                 check("noopener" in a.get("rel",""),"noopener: "+str(a))
         print("PASS",url,"SEO, links, accessibility, images")
