@@ -211,7 +211,7 @@ a:focus-visible { outline: 2px solid #52745a; outline-offset: 5px; }
 }
 @media (max-width: 760px) {
   .site-header { min-height: 70px; }
-  .site-nav { gap: 14px; }
+  .site-nav { gap: clamp(10px, 3.5vw, 14px); }
   .nav-secondary { display: none !important; }
   .index-intro { padding-top: 46px; padding-bottom: 26px; }
   .intro-year { display: none; }
