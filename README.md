@@ -1,39 +1,34 @@
 # Moretea Lab
 
-The official bilingual product showcase for https://moretea-lab.tech/.
+The official bilingual portfolio for https://moretea-lab.tech/.
 
-## Product catalogue
+## Products and release authority
 
-The homepage is a visual product portfolio, not a studio manifesto or an individual app landing page. It presents the currently published Moretea Lab apps together in one catalogue:
+The homepage is a visual software portfolio, not a two-app landing page. The public catalogue distinguishes three real states:
 
-- **Avela / Avela Meds** — medication companion, with its own independent product website and App Store destination.
-- **TempoVela** — metronome and tuner for focused music practice, with its official App Store destination.
+- **Published on the App Store:** Avela / Avela Meds and TempoVela. Both retain first-party app icons, authentic screenshots and verified regional store links. Avela also retains its own product site.
+- **Open-source:** Forge, with its GitHub repository and documentation as the public destinations.
+- **In development (no download or release-date claims):** Leafspan, Veilspace, TranslateDesk, AgentMail, TinyMoments and 肾宝宝 / Shenbaobao. Their public project or development links are labelled accordingly. Being in the portfolio does not imply the work has been released.
 
-Each product keeps its own identity, palette, first-party icon and real app screenshots. The catalogue gives both products equal visual weight and direct paths to their official destinations. Unreleased or retired work is not presented as a public product or download.
+The site owns its presentation, not any other product's release state, support, source or App Store listing. Do not automatically resurrect retired projects or claim a development project is publicly installable.
 
-## Source authority
+## Layout and design
 
-- This repository owns the shared studio homepage and product directory.
-- Avela keeps its existing independent website at https://avela.moretea-lab.tech/.
-- TempoVela remains a separate published iOS application.
-- Product sites and apps retain their own design and release authority.
+- Editorial studio introduction followed by **three full-width product features**, each with its own visual identity. Avela and TempoVela use first-party screenshots; the Forge feature uses a typographic treatment, not a fabricated screenshot.
+- An additional **six-project index** uses typography and distinct color surfaces with no invented product UI.
+- Responsive single-column featured product flows; a three/two/one-column project index on desktop/tablet/phone.
+- Bilingual static HTML/CSS, accessible navigation, 44px links, keyboard focus, alt text and reduced-motion support.
+- Canonical, reciprocal hreflang, sitemap, robots, Open Graph and a JSON-LD **released-product-only** list. The two-item JSON-LD does not represent the full portfolio: it only covers verified public App Store products.
+- No backend, CMS, tracking, third-party UI libraries, product status provider or duplicated release authority.
 
-## Design and engineering
+## Acceptance
 
-- Bilingual static HTML/CSS at `/` and `/en/`.
-- Two-column product catalogue on desktop; a readable single-column sequence on narrow screens.
-- Real first-party product assets, semantic headings, descriptive alt text, keyboard focus and reduced-motion support.
-- Canonical, reciprocal hreflang, sitemap, robots, Open Graph and JSON-LD.
-- No framework, database, CMS, login, analytics or third-party trackers.
-
-Run: `python3 scripts/check_site.py`
-
-Before accepting production, verify at 320 / 390 / 768 / 1280 px, keyboard focus, reduced motion, product links, sitemap/canonical and externally reachable HTTPS.
+Run `python3 scripts/check_site.py`. Verify the exact new source at 320 / 390 / 768 / 1280px, images and text, links, language switch, reduced motion, accessibility, production HTTPS, sitemap and canonical. Visual design acceptance is a separate user gate.
 
 ## Domain and deployment
 
-Deploy to the dedicated Vercel project with the GitHub `main` integration. Cloudflare owns DNS for moretea-lab.tech; do not edit Avela or any other existing subdomain. Build no new backend.
+Continue the existing Vercel `moretea-studio` project and Cloudflare DNS for `moretea-lab.tech`; do not alter the Avela subdomain, unrelated domains or private credentials.
 
-Forge Requirement: REQ-MORETEA-STUDIO-WEBSITE-20261113
-Forge Plan: PLAN-MORETEA-STUDIO-WEBSITE-20261113
-GitHub is the task progress authority.
+Forge Requirement: `REQ-MORETEA-STUDIO-WEBSITE-20261113`
+Forge Plan: `PLAN-MORETEA-STUDIO-WEBSITE-20261113`
+Progress authority: https://github.com/moretea-labs/studio-site/issues/1

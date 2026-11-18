@@ -70,7 +70,7 @@ def check_home(path, lang):
     html = (ROOT / path / "index.html").read_text(encoding="utf8")
     parsed = SitePage()
     parsed.feed(html)
-    check('href="/styles.css?v=20261118-44x44"' in html, "versioned shared stylesheet: " + path)
+    check('href="/styles.css?v=20261118-portfolio"' in html, "versioned shared stylesheet: " + path)
     url = "https://moretea-lab.tech/" + path
     check('lang="' + lang + '"' in html, "html lang: " + path)
     check(parsed.h1 == 1 and parsed.titles == 1, "headings: " + path)
@@ -87,10 +87,15 @@ def check_home(path, lang):
     organization = next((s for s in parsed.schemas if s.get("@type") == "Organization"), None)
     item_list = next((s for s in parsed.schemas if s.get("@type") == "ItemList"), None)
     check(organization and organization.get("url") == "https://moretea-lab.tech/", "Organization schema: " + path)
-    check(item_list and len(item_list.get("itemListElement", [])) == 2, "published product list only: " + path)
-    check("TranslateDesk" not in html and "COMING SOON" not in html, "unreleased product must not be promoted: " + path)
-    check('class="product product-avela"' in html, "Avela product tile: " + path)
-    check('class="product product-tempo"' in html, "TempoVela product tile: " + path)
+    check(item_list and len(item_list.get("itemListElement", [])) == 2, "released App Store product schema: " + path)
+    check('class="product-stage product-avela"' in html, "Avela featured stage: " + path)
+    check('class="product-stage product-tempo"' in html, "TempoVela featured stage: " + path)
+    check('class="product-stage product-forge"' in html, "Forge open-source stage: " + path)
+    check('id="forge" data-state="open-source"' in html, "Forge status: " + path)
+    for project_id in ("leafspan", "veilspace", "translatedesk", "agentmail", "tinymoments", "shenbaobao"):
+        check(f'id="{project_id}" data-state="in-development"' in html, "in-development portfolio project: " + project_id + " in " + path)
+    check('id="avela" data-state="released"' in html and 'id="tempo" data-state="released"' in html, "released product statuses: " + path)
+    check('class="work-grid"' in html, "additional products index: " + path)
     tempo_store_url = "https://apps.apple.com/cn/app/id6831952477" if lang == "zh-CN" else "https://apps.apple.com/us/app/id6831952477"
     check(any(a.get("href") == tempo_store_url for a in parsed.links), "TempoVela regional App Store URL: " + path)
     check(any(i.get("url") == tempo_store_url for i in item_list.get("itemListElement", [])), "TempoVela canonical App Store URL: " + path)
@@ -114,7 +119,7 @@ def check_home(path, lang):
     check(any(i.get("src") == "/assets/avela-today.webp" and i.get("fetchpriority") == "high" and i.get("loading") == "eager" for i in parsed.images), "priority image loading: " + path)
     for image_path in ("/assets/tempovela-courses.jpg", "/assets/tempovela-metronome.jpg"):
         check(any(i.get("src") == image_path and i.get("loading") == "lazy" for i in parsed.images), "deferred TempoVela image loading: " + image_path + " in " + path)
-    check('class="product-grid wrap" id="products"' in html, "single product catalogue: " + path)
+    check('class="featured wrap" id="products"' in html, "featured product stages: " + path)
     check(len(parsed.ids) == len(set(parsed.ids)), "duplicate anchor id: " + path)
     check(any(a.get("href") == ("/en/" if lang == "zh-CN" else "/") for a in parsed.links), "language switch: " + path)
     for a in parsed.links:
@@ -124,7 +129,7 @@ def check_home(path, lang):
             check(href[1:] in parsed.ids, "broken in-page navigation: " + href + " in " + path)
         if a.get("target") == "_blank":
             check("noopener" in a.get("rel", ""), "noopener: " + str(a))
-    print("PASS", url, "two-product catalogue, official destinations, bilingual SEO, first-party imagery")
+    print("PASS", url, "nine-product portfolio, released/open-source/development states, bilingual SEO and first-party imagery")
 
 
 def run():
@@ -133,10 +138,10 @@ def run():
     css = (ROOT / "styles.css").read_text(encoding="utf8")
     check("prefers-reduced-motion: reduce" in css, "reduced motion support")
     check(":focus-visible" in css, "visible keyboard focus")
-    check("@media (max-width: 760px)" in css and "grid-template-columns: 1fr" in css, "single-column mobile product catalogue")
+    check("@media (max-width: 760px)" in css and "grid-template-columns: 1fr" in css, "single-column mobile product stages")
     check(".product-tempo" in css and ".product-avela" in css, "distinct product art direction")
     check(".eyebrow {" in css, "shared legal page eyebrow style")
-    check(".product-grid" in css and ".product-link" in css, "product catalogue and direct product links")
+    check(".product-stage" in css and ".work-grid" in css and ".product-link" in css, "featured stages, project directory and direct product links")
     def css_rule(selector):
         start = css.index(selector + " {")
         return css[start:css.index("}", start) + 1]
@@ -160,7 +165,7 @@ def run():
     ]
     for source, url, title, kind in page_specs:
         html = (ROOT / source).read_text(encoding="utf8")
-        check('href="/styles.css?v=20261118-44x44"' in html, "versioned shared stylesheet: " + url)
+        check('href="/styles.css?v=20261118-portfolio"' in html, "versioned shared stylesheet: " + url)
         parsed = SitePage()
         parsed.feed(html)
         description = parsed.meta.get("description", "")
