@@ -111,7 +111,9 @@ def check_home(path, lang):
     for i in parsed.images:
         check(i.get("alt") and i.get("width") and i.get("height"), "image alt/dimensions: " + path)
         check((ROOT / i.get("src", "").lstrip("/")).is_file(), "image file: " + str(i))
-    check(any(i.get("src") == "/assets/avela-today.webp" and i.get("fetchpriority") == "high" for i in parsed.images), "priority image loading: " + path)
+    check(any(i.get("src") == "/assets/avela-today.webp" and i.get("fetchpriority") == "high" and i.get("loading") == "eager" for i in parsed.images), "priority image loading: " + path)
+    for image_path in ("/assets/tempovela-courses.jpg", "/assets/tempovela-metronome.jpg"):
+        check(any(i.get("src") == image_path and i.get("loading") == "lazy" for i in parsed.images), "deferred TempoVela image loading: " + image_path + " in " + path)
     check('class="product-grid wrap" id="products"' in html, "single product catalogue: " + path)
     check(len(parsed.ids) == len(set(parsed.ids)), "duplicate anchor id: " + path)
     check(any(a.get("href") == ("/en/" if lang == "zh-CN" else "/") for a in parsed.links), "language switch: " + path)
