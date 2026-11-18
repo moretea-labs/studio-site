@@ -70,6 +70,7 @@ def check_home(path, lang):
     html = (ROOT / path / "index.html").read_text(encoding="utf8")
     parsed = SitePage()
     parsed.feed(html)
+    check('href="/styles.css?v=20261118-44x44"' in html, "versioned shared stylesheet: " + path)
     url = "https://moretea-lab.tech/" + path
     check('lang="' + lang + '"' in html, "html lang: " + path)
     check(parsed.h1 == 1 and parsed.titles == 1, "headings: " + path)
@@ -142,7 +143,7 @@ def run():
         (".site-nav a", "header navigation"),
         (".product-link", "product actions"),
         (".footer-inner nav a", "footer navigation"),
-        (".policy footer a", "legal-page footer navigation"),
+        (".policy footer a, .support footer a", "legal-page footer navigation"),
     ):
         rule = css_rule(selector)
         check("min-width: 44px;" in rule and "min-height: 44px;" in rule, "44x44px " + label + " targets")
@@ -157,6 +158,7 @@ def run():
     ]
     for source, url, title, kind in page_specs:
         html = (ROOT / source).read_text(encoding="utf8")
+        check('href="/styles.css?v=20261118-44x44"' in html, "versioned shared stylesheet: " + url)
         parsed = SitePage()
         parsed.feed(html)
         description = parsed.meta.get("description", "")
@@ -212,9 +214,10 @@ def run():
         social_data = social_path.read_bytes()
         check(len(social_data) >= 24 and social_data[:8] == bytes.fromhex("89504e470d0a1a0a") and struct.unpack(">II", social_data[16:24]) == (1200, 630), "product social image dimensions: " + lang)
     vercel = json.loads((ROOT / "vercel.json").read_text(encoding="utf8"))
-    expected_cache = "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400"
+    expected_asset_cache = "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400"
+    expected_css_cache = "public, max-age=0, must-revalidate"
 
-    def has_cache_rule(source):
+    def has_cache_rule(source, expected_cache):
         return any(
             rule.get("source") == source and any(
                 header.get("key", "").lower() == "cache-control" and header.get("value") == expected_cache
@@ -223,8 +226,9 @@ def run():
             for rule in vercel.get("headers", [])
         )
 
-    for source in ["/assets/(.*)", "/styles.css", "/favicon.svg"]:
-        check(has_cache_rule(source), "static asset cache policy: " + source)
+    for source in ["/assets/(.*)", "/favicon.svg"]:
+        check(has_cache_rule(source, expected_asset_cache), "static asset cache policy: " + source)
+    check(has_cache_rule("/styles.css", expected_css_cache), "stylesheet revalidation cache policy")
     print("PASS sitemap, robots, static asset cache headers, social image")
     return 0
 

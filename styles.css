@@ -266,7 +266,7 @@ a:focus-visible { outline: 2px solid #52745a; outline-offset: 5px; }
   white-space: nowrap;
 }
 
-.policy footer a {
+.policy footer a, .support footer a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
