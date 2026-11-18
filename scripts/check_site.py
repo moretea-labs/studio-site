@@ -83,8 +83,8 @@ def check_home(path, lang):
     check(organization and organization.get("url") == "https://moretea-lab.tech/", "Organization schema: " + path)
     check(item_list and len(item_list.get("itemListElement", [])) == 2, "published product list only: " + path)
     check("TranslateDesk" not in html and "COMING SOON" not in html, "unreleased product must not be promoted: " + path)
-    check(any("product-avela" in s.get("class", "").split() for s in parsed.sections), "Avela product stage: " + path)
-    check(any("product-tempo" in s.get("class", "").split() for s in parsed.sections), "TempoVela product stage: " + path)
+    check('class="product product-avela"' in html, "Avela product tile: " + path)
+    check('class="product product-tempo"' in html, "TempoVela product tile: " + path)
     tempo_store_url = "https://apps.apple.com/cn/app/id6831952477" if lang == "zh-CN" else "https://apps.apple.com/us/app/id6831952477"
     check(any(a.get("href") == tempo_store_url for a in parsed.links), "TempoVela regional App Store URL: " + path)
     check(any(i.get("url") == tempo_store_url for i in item_list.get("itemListElement", [])), "TempoVela canonical App Store URL: " + path)
@@ -106,6 +106,7 @@ def check_home(path, lang):
         check(i.get("alt") and i.get("width") and i.get("height"), "image alt/dimensions: " + path)
         check((ROOT / i.get("src", "").lstrip("/")).is_file(), "image file: " + str(i))
     check(any(i.get("src") == "/assets/avela-today.webp" and i.get("fetchpriority") == "high" for i in parsed.images), "priority image loading: " + path)
+    check('class="product-grid wrap" id="products"' in html, "single product catalogue: " + path)
     check(len(parsed.ids) == len(set(parsed.ids)), "duplicate anchor id: " + path)
     check(any(a.get("href") == ("/en/" if lang == "zh-CN" else "/") for a in parsed.links), "language switch: " + path)
     for a in parsed.links:
@@ -115,7 +116,7 @@ def check_home(path, lang):
             check(href[1:] in parsed.ids, "broken in-page navigation: " + href + " in " + path)
         if a.get("target") == "_blank":
             check("noopener" in a.get("rel", ""), "noopener: " + str(a))
-    print("PASS", url, "product-first layout, published links, bilingual SEO, first-party imagery")
+    print("PASS", url, "two-product catalogue, official destinations, bilingual SEO, first-party imagery")
 
 
 def run():
@@ -124,9 +125,11 @@ def run():
     css = (ROOT / "styles.css").read_text(encoding="utf8")
     check("prefers-reduced-motion: reduce" in css, "reduced motion support")
     check(":focus-visible" in css, "visible keyboard focus")
-    check("@media (max-width: 700px)" in css, "mobile product layout")
+    check("@media (max-width: 760px)" in css and "grid-template-columns: 1fr" in css, "single-column mobile product catalogue")
     check(".product-tempo" in css and ".product-avela" in css, "distinct product art direction")
     check(".eyebrow {" in css, "shared legal page eyebrow style")
+    check(".product-grid" in css and ".product-link" in css, "product catalogue and direct product links")
+    check("@media (hover: hover)" in css, "hover-only product motion")
 
     page_specs = [
         ("veilspace/privacy/index.html", "https://moretea-lab.tech/veilspace/privacy/", "Veilspace Privacy Policy — Moretea Lab", "privacy"),
