@@ -142,6 +142,7 @@ def run():
         (".site-nav a", "header navigation"),
         (".product-link", "product actions"),
         (".footer-inner nav a", "footer navigation"),
+        (".policy footer a", "legal-page footer navigation"),
     ):
         rule = css_rule(selector)
         check("min-width: 44px;" in rule and "min-height: 44px;" in rule, "44x44px " + label + " targets")
