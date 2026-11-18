@@ -135,6 +135,9 @@ def check_home(path, lang):
     check('class="featured wrap" id="products"' in html, "featured product stages: " + path)
     check(len(parsed.ids) == len(set(parsed.ids)), "duplicate anchor id: " + path)
     check(any(a.get("href") == ("/en/" if lang == "zh-CN" else "/") for a in parsed.links), "language switch: " + path)
+    more_link = next((a for a in parsed.links if a.get("href") == "#more"), None)
+    check(more_link is not None and "nav-secondary" not in more_link.get("class", "").split(), "more-products navigation remains visible on mobile: " + path)
+    check(any("nav-secondary" in a.get("class", "").split() and a.get("href", "").startswith("https://github.com/") for a in parsed.links), "GitHub navigation remains desktop-only: " + path)
     for a in parsed.links:
         href = a.get("href", "")
         check(href.startswith(("/", "#", "https://", "mailto:")), "unsafe href: " + str(a))
