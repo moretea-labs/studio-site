@@ -97,7 +97,8 @@ def run():
         else:
             check("中文支持" in html, "Chinese support content")
             check(any(a.get("href")=="/veilspace/privacy/" for a in parsed.links), "support privacy link")
-            check(any("github.com/moretea-labs/studio-site/issues/new" in a.get("href","") for a in parsed.links), "support issue form")
+            support_actions=[a for a in parsed.links if "github.com/moretea-labs/studio-site/issues/new" in a.get("href","")]
+            check(len(support_actions)==2 and all("action" in a.get("class","").split() for a in support_actions), "bilingual support CTAs")
             check("Do not include passwords, private URLs, personal health information" in html, "support privacy warning")
         for a in parsed.links:
             href=a.get("href","")
