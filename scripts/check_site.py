@@ -4,6 +4,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 import json
 import sys
+import struct
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -76,7 +77,11 @@ def check_home(path, lang):
     check({"zh-CN", "en", "x-default"} <= set(parsed.languages), "hreflang: " + path)
     check(len(parsed.meta.get("description", "")) >= 40, "description: " + path)
     check(parsed.meta.get("og:url") == url, "Open Graph canonical: " + path)
-    check(parsed.meta.get("og:image") == "https://moretea-lab.tech/assets/og-studio.png", "social image: " + path)
+    social_image = "https://moretea-lab.tech/assets/og-products-zh.png" if lang == "zh-CN" else "https://moretea-lab.tech/assets/og-products-en.png"
+    check(parsed.meta.get("og:image") == social_image, "localized product social image: " + path)
+    check(parsed.meta.get("og:image:alt"), "social image alt: " + path)
+    check(parsed.meta.get("og:image:width") == "1200" and parsed.meta.get("og:image:height") == "630", "social image dimensions metadata: " + path)
+    check(parsed.meta.get("twitter:image") == social_image, "Twitter social image: " + path)
     check(len(parsed.schemas) == 2 and all(s.get("@context") == "https://schema.org" for s in parsed.schemas), "JSON-LD: " + path)
     organization = next((s for s in parsed.schemas if s.get("@type") == "Organization"), None)
     item_list = next((s for s in parsed.schemas if s.get("@type") == "ItemList"), None)
@@ -186,7 +191,11 @@ def run():
     check(required_urls <= sitemap_urls, "sitemap page coverage")
     robots = (ROOT / "robots.txt").read_text(encoding="utf8").splitlines()
     check("User-agent: *" in robots and "Allow: /" in robots and "Sitemap: https://moretea-lab.tech/sitemap.xml" in robots, "robots")
-    check((ROOT / "favicon.svg").is_file() and (ROOT / "assets/og-studio.png").is_file(), "social assets")
+    check((ROOT / "favicon.svg").is_file() and (ROOT / "assets/og-studio.png").is_file(), "legal social assets")
+    for lang in ("zh", "en"):
+        social_path = ROOT / f"assets/og-products-{lang}.png"
+        social_data = social_path.read_bytes()
+        check(len(social_data) >= 24 and social_data[:8] == bytes.fromhex("89504e470d0a1a0a") and struct.unpack(">II", social_data[16:24]) == (1200, 630), "product social image dimensions: " + lang)
     vercel = json.loads((ROOT / "vercel.json").read_text(encoding="utf8"))
     expected_cache = "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400"
 
