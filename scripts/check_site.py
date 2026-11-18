@@ -80,7 +80,9 @@ def check_home(path, lang):
     check(parsed.meta.get("og:url") == url, "Open Graph canonical: " + path)
     social_image = "https://moretea-lab.tech/assets/og-products-zh.png" if lang == "zh-CN" else "https://moretea-lab.tech/assets/og-products-en.png"
     check(parsed.meta.get("og:image") == social_image, "localized product social image: " + path)
-    check(parsed.meta.get("og:image:alt"), "social image alt: " + path)
+    social_alt = "两款已上架应用 Avela 一服药与 TempoVela 的界面展示" if lang == "zh-CN" else "Showcase of Moretea Lab’s two released apps: Avela Meds and TempoVela"
+    check(parsed.meta.get("og:image:alt") == social_alt, "Open Graph image describes the two released apps: " + path)
+    check(parsed.meta.get("twitter:image:alt") == social_alt, "Twitter image alt matches the released-app showcase: " + path)
     check(parsed.meta.get("og:image:width") == "1200" and parsed.meta.get("og:image:height") == "630", "social image dimensions metadata: " + path)
     check(parsed.meta.get("twitter:image") == social_image, "Twitter social image: " + path)
     check(len(parsed.schemas) == 2 and all(s.get("@context") == "https://schema.org" for s in parsed.schemas), "JSON-LD: " + path)
