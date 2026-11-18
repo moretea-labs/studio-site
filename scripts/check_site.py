@@ -134,6 +134,11 @@ def run():
     check(".product-tempo" in css and ".product-avela" in css, "distinct product art direction")
     check(".eyebrow {" in css, "shared legal page eyebrow style")
     check(".product-grid" in css and ".product-link" in css, "product catalogue and direct product links")
+    product_link_rule = css[css.index(".product-link {"):css.index("}", css.index(".product-link {")) + 1]
+    footer_link_rule = css[css.index(".footer-inner nav a {"):css.index("}", css.index(".footer-inner nav a {")) + 1]
+    check("min-height: 44px;" in product_link_rule, "44px product action targets")
+    check("min-height: 44px;" in footer_link_rule, "44px footer navigation targets")
+    check("min-height: 34px !important" not in css, "language switch retains 44px navigation target")
     check("@media (hover: hover)" in css, "hover-only product motion")
 
     page_specs = [
