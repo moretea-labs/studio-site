@@ -96,6 +96,17 @@ def check_home(path, lang):
         check(f'id="{project_id}" data-state="in-development"' in html, "in-development portfolio project: " + project_id + " in " + path)
     check('id="avela" data-state="released"' in html and 'id="tempo" data-state="released"' in html, "released product statuses: " + path)
     check('class="work-grid"' in html, "additional products index: " + path)
+    public_project_urls = {
+        "https://github.com/moretea-labs/personal-knowledge-assistant/issues/37",
+        "https://github.com/moretea-labs/FluentTranslate",
+    }
+    work_links = {a.get("href") for a in parsed.links if "work-link" in a.get("class", "").split()}
+    check(work_links == public_project_urls, "only anonymously accessible development references are linked: " + path)
+    for project_id in ("veilspace", "agentmail", "tinymoments", "shenbaobao"):
+        card_start = html.index(f'id="{project_id}"')
+        card_end = html.index("</article>", card_start)
+        card = html[card_start:card_end]
+        check('class="work-link"' not in card and 'class="work-art-corner"' not in card, "private project cards have no dead external action: " + project_id + " in " + path)
     tempo_store_url = "https://apps.apple.com/cn/app/id6831952477" if lang == "zh-CN" else "https://apps.apple.com/us/app/id6831952477"
     check(any(a.get("href") == tempo_store_url for a in parsed.links), "TempoVela regional App Store URL: " + path)
     check(any(i.get("url") == tempo_store_url for i in item_list.get("itemListElement", [])), "TempoVela canonical App Store URL: " + path)
