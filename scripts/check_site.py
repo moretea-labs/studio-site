@@ -134,11 +134,20 @@ def run():
     check(".product-tempo" in css and ".product-avela" in css, "distinct product art direction")
     check(".eyebrow {" in css, "shared legal page eyebrow style")
     check(".product-grid" in css and ".product-link" in css, "product catalogue and direct product links")
-    product_link_rule = css[css.index(".product-link {"):css.index("}", css.index(".product-link {")) + 1]
-    footer_link_rule = css[css.index(".footer-inner nav a {"):css.index("}", css.index(".footer-inner nav a {")) + 1]
-    check("min-height: 44px;" in product_link_rule, "44px product action targets")
-    check("min-height: 44px;" in footer_link_rule, "44px footer navigation targets")
-    check("min-height: 34px !important" not in css, "language switch retains 44px navigation target")
+    def css_rule(selector):
+        start = css.index(selector + " {")
+        return css[start:css.index("}", start) + 1]
+
+    for selector, label in (
+        (".site-nav a", "header navigation"),
+        (".product-link", "product actions"),
+        (".footer-inner nav a", "footer navigation"),
+    ):
+        rule = css_rule(selector)
+        check("min-width: 44px;" in rule and "min-height: 44px;" in rule, "44x44px " + label + " targets")
+    for selector, label in ((".brand", "header brand"), (".footer-brand", "footer brand"), (".skip-link", "skip link")):
+        check("min-height: 44px;" in css_rule(selector), "44px " + label + " target height")
+    check("min-height: 34px !important" not in css, "language switch retains shared navigation target")
     check("@media (hover: hover)" in css, "hover-only product motion")
 
     page_specs = [
