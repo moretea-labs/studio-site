@@ -7,11 +7,11 @@ Public bilingual static product directory for https://moretea-lab.tech/.
 - This repository owns only the common studio homepage and product directory.
 - Avela keeps its existing independent website at https://avela.moretea-lab.tech/.
 - TempoVela remains a separate published iOS application.
-- TranslateDesk appears only as an upcoming product until its GitHub release is accepted.
+- Unreleased or retired work is not presented as a public product or download.
 
 ## Product and design acceptance
 
-Original first-party app screenshots are copied from the existing Avela and TempoVela repositories. The studio homepage is deliberately minimal: HTML, CSS, no framework, database, CMS, login, analytics or third-party trackers. Different products retain separate visual styles.
+The homepage is a product-first portfolio: Avela's calm light interface and TempoVela's dark music-practice interface are presented with first-party app screenshots and distinct visual stages. Product websites and apps keep their own design authority. The site remains static HTML/CSS, without a framework, database, CMS, login, analytics or third-party trackers.
 
 Run: python3 scripts/check_site.py
 
