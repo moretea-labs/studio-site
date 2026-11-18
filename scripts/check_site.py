@@ -126,6 +126,7 @@ def run():
     check(":focus-visible" in css, "visible keyboard focus")
     check("@media (max-width: 700px)" in css, "mobile product layout")
     check(".product-tempo" in css and ".product-avela" in css, "distinct product art direction")
+    check(".eyebrow {" in css, "shared legal page eyebrow style")
 
     page_specs = [
         ("veilspace/privacy/index.html", "https://moretea-lab.tech/veilspace/privacy/", "Veilspace Privacy Policy — Moretea Lab", "privacy"),
@@ -137,6 +138,8 @@ def run():
         parsed.feed(html)
         description = parsed.meta.get("description", "")
         check('lang="en"' in html, "html lang: " + source)
+        check('class="site-header wrap"' in html and 'class="site-nav"' in html, "shared site header: " + source)
+        check('class="brand-mark"' in html and 'class="brand-name"' in html, "shared brand styling: " + source)
         check(parsed.h1 == 1 and parsed.titles == 1, "headings: " + source)
         check(parsed.canonical == [url], "canonical: " + source)
         check(90 <= len(description) <= 160, "description length: " + source)
